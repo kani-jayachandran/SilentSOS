@@ -1,0 +1,82 @@
+@import 'leaflet/dist/leaflet.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  
+  body {
+    @apply bg-gray-50 text-gray-900;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+  }
+  
+  .btn-emergency {
+    @apply bg-emergency-600 hover:bg-emergency-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+  }
+  
+  .btn-safe {
+    @apply bg-safe-600 hover:bg-safe-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+  }
+  
+  .card {
+    @apply bg-white rounded-lg shadow-sm border border-gray-200 p-6;
+  }
+  
+  .status-indicator {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+  
+  .status-safe {
+    @apply bg-safe-100 text-safe-800;
+  }
+  
+  .status-warning {
+    @apply bg-warning-100 text-warning-800;
+  }
+  
+  .status-emergency {
+    @apply bg-emergency-100 text-emergency-800;
+  }
+}
+
+/* Emergency pulse animation */
+@keyframes emergency-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+.emergency-pulse {
+  animation: emergency-pulse 1.5s ease-in-out infinite;
+}
+
+/* Sensor data visualization */
+.sensor-graph {
+  @apply w-full h-32 bg-gray-100 rounded border;
+}
+
+/* Mobile optimizations */
+@media (max-width: 640px) {
+  .card {
+    @apply p-4;
+  }
+  
+  .btn-primary,
+  .btn-emergency,
+  .btn-safe {
+    @apply w-full justify-center;
+  }
+}
