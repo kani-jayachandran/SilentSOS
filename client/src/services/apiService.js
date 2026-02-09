@@ -62,7 +62,18 @@ class ApiService {
       const response = await fetch(url, config);
       
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
+        let errorData;
+        try {
+          errorData = await response.json();
+        } catch (parseError) {
+          errorData = { error: response.statusText };
+        }
+        
+        console.error('API Error Response:', {
+          status: response.status,
+          statusText: response.statusText,
+          errorData
+        });
         
         if (response.status === 401) {
           throw new Error('Authentication failed. Please sign in again.');
@@ -72,7 +83,10 @@ class ApiService {
           throw new Error('Access denied. You can only access your own data.');
         }
         
-        throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`);
+        // Include backend error details in the error message
+        const errorMessage = errorData.details || errorData.error || `HTTP ${response.status}: ${response.statusText}`;
+        const hint = errorData.hint || '';
+        throw new Error(`${errorMessage}${hint ? ' (' + hint + ')' : ''}`);
       }
 
       return await response.json();

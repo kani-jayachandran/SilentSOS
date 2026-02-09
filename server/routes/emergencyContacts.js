@@ -153,12 +153,18 @@ async function sendMultiRecipientEmergencyAlert(alertData) {
     const sosEventsSnapshot = await db.collection('sos_events')
       .where('userId', '==', userId)
       .where('status', '==', 'active')
-      .orderBy('updatedAt', 'desc')
       .limit(1)
       .get();
     
     if (!sosEventsSnapshot.empty) {
-      const locationData = sosEventsSnapshot.docs[0].data();
+      // Sort in memory to get the most recent
+      const docs = sosEventsSnapshot.docs.sort((a, b) => {
+        const aTime = a.data().updatedAt?.toDate?.() || new Date(a.data().updatedAt);
+        const bTime = b.data().updatedAt?.toDate?.() || new Date(b.data().updatedAt);
+        return bTime - aTime;
+      });
+      
+      const locationData = docs[0].data();
       userLocation = {
         latitude: locationData.latitude,
         longitude: locationData.longitude,
@@ -447,7 +453,6 @@ router.get('/list', async (req, res) => {
     
     const snapshot = await db.collection('emergency_contacts')
       .where('userId', '==', userId)
-      .orderBy('createdAt', 'desc')
       .get();
     
     console.log(`Retrieved ${snapshot.size} emergency contacts for user`);
@@ -460,6 +465,13 @@ router.get('/list', async (req, res) => {
         ...data,
         createdAt: data.createdAt?.toDate?.()?.toISOString() || data.createdAt
       });
+    });
+    
+    // Sort by createdAt in memory (most recent first)
+    contacts.sort((a, b) => {
+      const dateA = new Date(a.createdAt);
+      const dateB = new Date(b.createdAt);
+      return dateB - dateA;
     });
     
     res.json({

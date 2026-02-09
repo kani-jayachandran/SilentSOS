@@ -55,6 +55,10 @@ const RealDashboard = () => {
     try {
       setSendingManualAlert(true);
       
+      console.log('=== MANUAL ALERT DEBUG START ===');
+      console.log('User:', user?.uid, user?.email);
+      console.log('Current sensor data:', sensorData);
+      
       // Import apiService dynamically to avoid circular dependencies
       const { apiService } = await import('../services/apiService');
       
@@ -107,30 +111,43 @@ const RealDashboard = () => {
           note: 'Manual emergency alert triggered by user from dashboard'
         },
         timestamp: new Date().toISOString(),
-        confidence: 100, // Manual alerts are 100% confidence
+        confidence: 100,
         manual: true
       };
       
+      console.log('Emergency data to send:', JSON.stringify(emergencyData, null, 2));
+      console.log('API Base URL:', apiService.baseURL);
+      
       const response = await apiService.reportEmergency(emergencyData);
       
-      if (response.success) {
-        alert('Manual emergency alert sent successfully! Emergency contacts have been notified with your current location.');
+      console.log('API Response:', response);
+      console.log('=== MANUAL ALERT DEBUG END ===');
+      
+      if (response && response.success) {
+        alert('✅ Manual emergency alert sent successfully!\n\nEmergency contacts have been notified with your current location.');
       } else {
-        alert('Failed to send manual alert. Please try again.');
+        // Show backend error details if available
+        const errorMsg = response?.details || response?.error || 'Unknown error';
+        const hint = response?.hint || '';
+        alert(`❌ Failed to send manual alert.\n\nError: ${errorMsg}\n${hint ? '\nHint: ' + hint : ''}\n\nCheck browser console for details.`);
       }
       
     } catch (error) {
-      console.error('Failed to send manual alert:', error);
+      console.error('=== MANUAL ALERT ERROR ===');
+      console.error('Error type:', error.constructor.name);
+      console.error('Error message:', error.message);
+      console.error('Error stack:', error.stack);
+      console.error('Full error:', error);
       
       // More specific error messages
       if (error.message.includes('Backend server unavailable')) {
-        alert('Server connection failed. Please ensure the backend server is running and try again.');
+        alert('🔌 Server Connection Failed\n\nThe backend server is not responding. Please ensure:\n1. Server is running on http://localhost:5000\n2. Check your network connection\n3. Try refreshing the page');
       } else if (error.message.includes('Authentication')) {
-        alert('Authentication error. Please sign out and sign in again.');
+        alert('🔐 Authentication Error\n\nYour session may have expired. Please:\n1. Sign out\n2. Sign in again\n3. Try sending the alert again');
       } else if (error.message.includes('Failed to fetch')) {
-        alert('Network error. Please check your internet connection and try again.');
+        alert('🌐 Network Error\n\nCannot connect to the server. Please:\n1. Check your internet connection\n2. Verify the server is running\n3. Check browser console for details');
       } else {
-        alert(`Error sending manual alert: ${error.message}`);
+        alert(`❌ Error Sending Manual Alert\n\n${error.message}\n\nCheck browser console for details.`);
       }
     } finally {
       setSendingManualAlert(false);

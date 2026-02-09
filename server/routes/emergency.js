@@ -12,6 +12,11 @@ router.use(authenticateUser);
 // Report emergency
 router.post('/report', async (req, res) => {
   try {
+    console.log('=== EMERGENCY REPORT REQUEST START ===');
+    console.log('User:', req.user?.uid, req.user?.email);
+    console.log('Request body keys:', Object.keys(req.body));
+    console.log('Manual alert:', req.body.manual);
+    
     const {
       sensorData,
       location,
@@ -23,6 +28,7 @@ router.post('/report', async (req, res) => {
 
     // Use authenticated user ID
     const userId = req.user.uid;
+    console.log('Processing emergency for userId:', userId);
 
     const db = getFirestore();
     const io = req.app.get('io');
@@ -30,6 +36,7 @@ router.post('/report', async (req, res) => {
     // Calculate emergency score (skip for manual alerts)
     let emergencyScore;
     if (manual) {
+      console.log('Manual alert detected - using 100% confidence');
       // For manual alerts, use 100% confidence and skip complex scoring
       emergencyScore = {
         totalScore: 100,
@@ -44,7 +51,9 @@ router.post('/report', async (req, res) => {
         }
       };
     } else {
+      console.log('Automatic alert - calculating emergency score');
       emergencyScore = calculateEmergencyScore(sensorData, contextData, location);
+      console.log('Emergency score calculated:', emergencyScore.totalScore);
     }
     
     // Create emergency record
@@ -59,15 +68,18 @@ router.post('/report', async (req, res) => {
       status: 'active',
       resolved: false,
       createdAt: new Date().toISOString(),
-      userEmail: req.user.email,
-      isAnonymous: req.user.isAnonymous,
+      userEmail: req.user.email || 'no-email@silentsos.app', // Handle undefined email
+      isAnonymous: req.user.isAnonymous || false,
       manual: manual || false
     };
 
+    console.log('Writing emergency to Firestore...');
     const docRef = await db.collection('emergencies').add(emergencyData);
+    console.log('Emergency saved with ID:', docRef.id);
     
     // Emit real-time update to dashboard
     if (io) {
+      console.log('Emitting real-time update to dashboard');
       io.to('dashboard').emit('new-emergency', {
         id: docRef.id,
         ...emergencyData
@@ -76,16 +88,19 @@ router.post('/report', async (req, res) => {
 
     // Send notifications to trusted contacts
     try {
+      console.log('Sending emergency notifications...');
       await sendEmergencyNotifications(userId, {
         id: docRef.id,
         ...emergencyData
       });
+      console.log('Emergency notifications sent successfully');
     } catch (notificationError) {
       console.error('Notification error:', notificationError);
     }
 
     // Send emergency alerts with live location to emergency contacts
     try {
+      console.log('Sending emergency alerts with location...');
       const alertResult = await sendEmergencyAlert(userId, {
         id: docRef.id,
         confidence: manual ? 100 : emergencyScore.totalScore,
@@ -99,6 +114,7 @@ router.post('/report', async (req, res) => {
       console.error('Emergency alert error:', alertError);
     }
 
+    console.log('=== EMERGENCY REPORT REQUEST SUCCESS ===');
     res.json({
       success: true,
       emergencyId: docRef.id,
@@ -108,11 +124,21 @@ router.post('/report', async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Emergency report error:', error);
+    console.error('=== EMERGENCY REPORT REQUEST ERROR ===');
+    console.error('Error type:', error.constructor.name);
+    console.error('Error message:', error.message);
+    console.error('Error stack:', error.stack);
+    
+    // Send detailed error to frontend
     res.status(500).json({ 
       success: false,
       error: 'Failed to report emergency',
-      details: error.message 
+      details: error.message,
+      hint: error.message.includes('Firestore') 
+        ? 'Database error - check server logs' 
+        : error.message.includes('auth')
+        ? 'Authentication error - please sign in again'
+        : 'Server error - check server logs'
     });
   }
 });
@@ -180,7 +206,6 @@ router.get('/active', async (req, res) => {
     
     const snapshot = await db.collection('emergencies')
       .where('status', '==', 'active')
-      .orderBy('createdAt', 'desc')
       .limit(50)
       .get();
 
@@ -192,6 +217,13 @@ router.get('/active', async (req, res) => {
         id: doc.id,
         ...doc.data()
       });
+    });
+
+    // Sort by createdAt in memory (most recent first)
+    emergencies.sort((a, b) => {
+      const dateA = new Date(a.createdAt);
+      const dateB = new Date(b.createdAt);
+      return dateB - dateA;
     });
 
     res.json(emergencies);
@@ -237,7 +269,6 @@ router.get('/history/:userId', validateUserAccess, async (req, res) => {
     
     const snapshot = await db.collection('emergencies')
       .where('userId', '==', userId)
-      .orderBy('createdAt', 'desc')
       .limit(20)
       .get();
 
@@ -249,6 +280,13 @@ router.get('/history/:userId', validateUserAccess, async (req, res) => {
         id: doc.id,
         ...doc.data()
       });
+    });
+
+    // Sort by createdAt in memory (most recent first)
+    emergencies.sort((a, b) => {
+      const dateA = new Date(a.createdAt);
+      const dateB = new Date(b.createdAt);
+      return dateB - dateA;
     });
 
     res.json(emergencies);

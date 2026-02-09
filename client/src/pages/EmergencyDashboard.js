@@ -226,7 +226,7 @@ const EmergencyDashboard = () => {
                           </div>
                         </div>
                         
-                        {emergency.location && (
+                        {emergency.location && emergency.location.latitude !== null && emergency.location.longitude !== null && (
                           <div className="flex items-center space-x-1 text-sm text-gray-600 mb-2">
                             <MapPin className="h-4 w-4" />
                             <span>

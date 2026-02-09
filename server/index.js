@@ -54,8 +54,20 @@ app.use('/api/contacts', contactRoutes);
 app.use('/api/emergency-contacts', emergencyContactRoutes);
 
 // Health check
-app.get('/health', (req, res) => {
+app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
+});
+
+// Test endpoint for manual alert debugging
+app.post('/api/test-alert', (req, res) => {
+  console.log('=== TEST ALERT ENDPOINT HIT ===');
+  console.log('Request body:', req.body);
+  console.log('Request headers:', req.headers);
+  res.json({ 
+    success: true, 
+    message: 'Test endpoint working',
+    receivedData: req.body 
+  });
 });
 
 // Socket.IO for real-time updates

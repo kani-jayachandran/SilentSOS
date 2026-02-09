@@ -329,7 +329,7 @@ const TrustedContacts = () => {
           <h3 className="text-lg font-semibold text-red-900 mb-2">🚨 Multi-Recipient Emergency Alert System</h3>
           <ul className="text-red-800 text-sm space-y-1">
             <li>• When you add an emergency contact, alerts are sent to:</li>
-            <li className="ml-4">→ Admin: <strong>kanijayachandran25@gmail.com</strong></li>
+            <li className="ml-4">→ Admin: <strong>Kani Jayachandran</strong></li>
             <li className="ml-4">→ ALL your emergency contacts individually</li>
             <li>• Each contact receives personalized emergency alert notifications</li>
             <li>• <strong>📍 Live location data included</strong> when GPS tracking is active</li>
@@ -346,7 +346,7 @@ const TrustedContacts = () => {
             <p>✅ Gmail SMTP configured for multi-recipient alerts</p>
             <p>✅ Firebase Firestore integration with email field</p>
             <p>✅ Individual email delivery to each contact</p>
-            <p>✅ Admin notifications to kanijayachandran25@gmail.com</p>
+            <p>✅ Admin notifications to Gmail</p>
             <p>✅ <strong>Live GPS location included in all emergency emails</strong></p>
             <p>✅ Google Maps links for immediate navigation</p>
             <p>✅ Real-time emergency detection enabled</p>

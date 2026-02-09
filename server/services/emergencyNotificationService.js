@@ -47,12 +47,18 @@ async function sendEmergencyAlert(userId, emergencyData, locationData = null) {
         const sosEventsSnapshot = await db.collection('sos_events')
           .where('userId', '==', userId)
           .where('status', '==', 'active')
-          .orderBy('updatedAt', 'desc')
           .limit(1)
           .get();
         
         if (!sosEventsSnapshot.empty) {
-          const locationDoc = sosEventsSnapshot.docs[0].data();
+          // Sort in memory to get the most recent
+          const docs = sosEventsSnapshot.docs.sort((a, b) => {
+            const aTime = a.data().updatedAt?.toDate?.() || new Date(a.data().updatedAt);
+            const bTime = b.data().updatedAt?.toDate?.() || new Date(b.data().updatedAt);
+            return bTime - aTime;
+          });
+          
+          const locationDoc = docs[0].data();
           locationData = {
             latitude: locationDoc.latitude,
             longitude: locationDoc.longitude,
