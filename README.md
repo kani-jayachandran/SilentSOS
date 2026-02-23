@@ -1,39 +1,39 @@
 # SilentSOS - Automatic Emergency Detection Without User Action
 
-## 🚨 Project Overview
+## Project Overview
 SilentSOS is a revolutionary real-time, privacy-first safety web application that automatically detects emergencies using **REAL device sensor data** without requiring any user action. Built for hackathons and real-world deployment, this system demonstrates cutting-edge AI-powered emergency detection with full transparency and ethical considerations.
 
-## 🎯 Problem Statement
+## Problem Statement
 Traditional emergency systems require conscious user action - but what happens when someone can't press a button? Falls, accidents, medical emergencies, or dangerous situations often leave victims unable to call for help. **Every second counts**, and SilentSOS bridges this critical gap.
 
-## ✨ Key Innovation Features
+## Key Innovation Features
 
-### 1. **Context-Aware Emergency Scoring** 🧠
+### 1. **Context-Aware Emergency Scoring** 
 - Dynamic risk assessment based on time of day, location type, and environmental factors
 - Adjusts emergency confidence using multiple contextual signals
 - **Novel Algorithm**: `Emergency Score = Sensor Risk + Context Risk Weight`
 
-### 2. **Adaptive False-Alarm Learning** 📚
+### 2. **Adaptive False-Alarm Learning** 
 - Learns from user cancellations to personalize detection thresholds
 - Reduces false positives while maintaining high sensitivity
 - **User-Adaptive Risk Calibration** for each individual
 
-### 3. **Silent Mode & Stealth Operation** 🤫
+### 3. **Silent Mode & Stealth Operation** 
 - Continues monitoring even when phone is in silent mode
 - Works in sensitive situations without visible alerts
 - Perfect for domestic violence or dangerous scenarios
 
-### 4. **Crowd-Signal Verification** 👥
+### 4. **Crowd-Signal Verification** 
 - Correlates emergency signals from nearby users
 - Increases confidence when multiple people detect anomalies
 - Enables mass casualty event detection
 
-### 5. **Automatic Safe-Zone Awareness** 🏥
+### 5. **Automatic Safe-Zone Awareness** 
 - Real-time detection of nearby hospitals, police, fire stations
 - Adjusts risk assessment based on proximity to help
 - Provides optimal routing information during emergencies
 
-### 6. **Ethical AI Transparency Panel** 🔍
+### 6. **Ethical AI Transparency Panel**
 - Every emergency decision is fully explainable
 - Shows contributing factors and confidence breakdowns
 - Builds trust through transparent AI decision-making
@@ -58,7 +58,7 @@ Traditional emergency systems require conscious user action - but what happens w
 - **Context-Aware Scoring**: Environmental and situational risk factors
 - **Adaptive Learning**: User-specific threshold adjustment
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 - Node.js 16+
@@ -68,7 +68,7 @@ Traditional emergency systems require conscious user action - but what happens w
 ### Installation
 ```bash
 # Clone and install
-git clone <repository>
+git clone https://github.com/kani-jayachandran/SilentSOS
 cd silentsos
 npm run install-all
 
@@ -151,7 +151,7 @@ navigator.geolocation.watchPosition((position) => {
 });
 ```
 
-## 🎨 User Interface
+## User Interface
 
 ### Pages & Features
 1. **Landing Page**: Problem explanation, solution overview, ethical principles
@@ -167,7 +167,7 @@ navigator.geolocation.watchPosition((position) => {
 - Offline-capable with Service Worker
 - PWA support for app-like experience
 
-## 🔒 Privacy & Security
+## Privacy & Security
 
 ### Data Protection
 - **No Raw Audio Storage**: Only metadata and emergency-relevant features
@@ -181,7 +181,7 @@ navigator.geolocation.watchPosition((position) => {
 - **Privacy by Design**: Minimal data collection and processing
 - **Bias Prevention**: Regular algorithm auditing and fairness testing
 
-## 📊 Emergency Detection Algorithm
+## Emergency Detection Algorithm
 
 ### Scoring Components
 ```
@@ -203,7 +203,7 @@ Total Emergency Score = (
 - Missed emergency feedback increases sensitivity
 - User-specific threshold calibration over time
 
-## 🌐 Deployment & Scaling
+## Deployment & Scaling
 
 ### Production Checklist
 - [ ] HTTPS certificate configured
@@ -240,7 +240,7 @@ npm run test:compatibility
 - Real-time dashboard for judges/evaluators
 - Comprehensive logging and analytics
 
-## 🏆 Hackathon Highlights
+## Hackathon Highlights
 
 ### Judge Evaluation Points
 1. **Real Sensor Usage**: Actual browser APIs, not simulated data
@@ -257,7 +257,7 @@ npm run test:compatibility
 4. Show emergency dashboard with live updates
 5. Highlight privacy and ethical considerations
 
-## 📈 Future Enhancements
+## Future Enhancements
 
 ### Planned Features
 - Machine learning model improvements
@@ -272,11 +272,11 @@ npm run test:compatibility
 - Global CDN deployment
 - Advanced analytics and reporting
 
-## 🤝 Contributing
+## Contributing
 
 ### Development Setup
 ```bash
-git clone <repository>
+git clone https://github.com/kani-jayachandran/SilentSOS
 cd silentsos
 npm run install-all
 npm run dev
@@ -288,7 +288,7 @@ npm run dev
 - Real-time performance monitoring
 - Security-first development practices
 
-## 📄 License & Legal
+## License & Legal
 
 ### Open Source License
 MIT License - Free for educational and commercial use
@@ -296,7 +296,7 @@ MIT License - Free for educational and commercial use
 ### Disclaimer
 SilentSOS is designed to supplement, not replace, traditional emergency services. Always call local emergency numbers (911, 112, etc.) when possible.
 
-## 📞 Support & Contact
+## Support & Contact
 
 ### Documentation
 - [API Documentation](./docs/api.md)
