@@ -96,13 +96,13 @@ docker-compose up
 firebase deploy
 ```
 
-## 📱 Browser Compatibility & Requirements
+## Browser Compatibility & Requirements
 
 ### Supported Browsers
-- ✅ Chrome/Chromium (Android/Desktop) - Full support
-- ✅ Edge (Windows/Android) - Full support  
-- ⚠️ Safari (iOS) - Limited DeviceMotion support
-- ❌ Firefox - No DeviceMotion API support
+- Chrome/Chromium (Android/Desktop) - Full support
+- Edge (Windows/Android) - Full support  
+- Safari (iOS) - Limited DeviceMotion support
+- Firefox - No DeviceMotion API support
 
 ### Required Permissions
 - **Motion & Orientation**: Fall and impact detection
@@ -116,7 +116,7 @@ firebase deploy
 - Let's Encrypt certificates
 - ngrok for local HTTPS testing
 
-## 🔬 Real Sensor Implementation
+## Real Sensor Implementation
 
 ### Motion Detection (DeviceMotionEvent)
 ```javascript
